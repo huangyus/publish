@@ -227,7 +227,7 @@ WEBSITE_STATIC_DEV = 'http://192.168.126.138/resource'
 
 # ldap config
 LDAP_SERVER_URI = 'ldap://192.168.126.138:3268'
-LDAP_BIND_DN = "cn=svn,ou=admin_temp,ou=admin,ou=WOW_all_user,dc=wowshga,dc=internal"
-LDAP_BIND_SEARCH = 'ou=NESH_USER,dc=wowshga,dc=internal'
+LDAP_BIND_DN = "xxx"
+LDAP_BIND_SEARCH = 'xxxx'
 LDAP_BIND_PASSWORD = "xxxxx"
 
