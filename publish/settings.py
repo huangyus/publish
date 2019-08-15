@@ -102,7 +102,7 @@ WSGI_APPLICATION = 'publish.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'publish_v1',
+        'NAME': 'publish',
         'USER': 'root',
         'PASSWORD': '123456',
         'HOST': '127.0.0.1',
@@ -226,7 +226,8 @@ NGINX_BASE_DEV = os.path.join(BASE_DIR, 'static', 'nginx')
 WEBSITE_STATIC_DEV = 'http://192.168.126.138/resource'
 
 # ldap config
-LDAP_SERVER_URI = 'ldap://192.168.104.251:3268'
+LDAP_SERVER_URI = 'ldap://192.168.126.138:3268'
 LDAP_BIND_DN = "cn=svn,ou=admin_temp,ou=admin,ou=WOW_all_user,dc=wowshga,dc=internal"
-LDAP_BIND_PASSWORD = "enKIcw#0706"
+LDAP_BIND_SEARCH = 'ou=NESH_USER,dc=wowshga,dc=internal'
+LDAP_BIND_PASSWORD = "xxxxx"
 

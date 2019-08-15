@@ -8,6 +8,8 @@
 1. 前后端分离
 2. saltstack支持底层架构
 
+![avatar](./publish.png)
+
 #### 安装教程
 
 1. pip install -r requirements.txt

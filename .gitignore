@@ -2,7 +2,6 @@
 .idea/**
 venv/**
 db.sqlite3
-README.md
 api/__pycache__/*
 main/migrations/*
 main/__pycache__/*

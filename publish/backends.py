@@ -27,8 +27,7 @@ class LDAPServer(object):
 
     @staticmethod
     def search(client, username):
-        # result = client.search_s('ou=WOW_all_user,dc=wowshga,dc=internal', ldap.SCOPE_SUBTREE, '(SamAccountName=%s)' % username)
-        result = client.search_s('ou=NESH_USER,dc=wowshga,dc=internal', ldap.SCOPE_SUBTREE, '(SamAccountName=%s)' % username)
+        result = client.search_s(settings.LDAP_BIND_SEARCH, ldap.SCOPE_SUBTREE, '(SamAccountName=%s)' % username)
         return result[0][0]
 
 
