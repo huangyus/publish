@@ -1,0 +1,19 @@
+pika
+channels
+Django==2.1.2
+djangorestframework==3.9.1
+celery==4.2.1
+django-celery-results==1.0.4
+# 手动安装
+# https://twistedmatrix.com/Releases/Twisted/18.9/Twisted-18.9.0.tar.bz2
+channels-redis==2.3.3
+djangorestframework-jwt==1.11.0
+django-cors-headers==2.4.0
+mysqlclient==1.4.1
+pycrypto==2.6.1
+cryptography==2.4.2
+paramiko==2.4.2
+xmltodict==0.11.0
+Jinja2==2.10
+requests==2.21.0
+python-ldap

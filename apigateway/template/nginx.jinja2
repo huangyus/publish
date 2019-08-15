@@ -1,0 +1,98 @@
+{%- if user and group  -%}
+user {{ user }} {{ group }};
+{%- else %}
+user {{ user }};
+{%- endif %}
+
+worker_processes {{ worker_processes }};
+{%- if pid_path %}
+pid {{ pid_path }};
+{%- endif %}
+
+{%- if error_log %}
+error_log {{ error_log }};
+{%- endif %}
+
+events {
+    use epoll;
+    worker_connections {{ worker_connections }};
+}
+
+http {
+
+    ##
+    # 基本配置
+    ##
+
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    server_tokens off;
+
+    keepalive_timeout {{ keepalive_timeout }};
+    types_hash_max_size 2048;
+    client_max_body_size {{ client_max_body_size }}m;
+
+    include {{ nginx_conf_path }}/mime.types;
+    default_type application/octet-stream;
+
+    ##
+    # 日志配置
+    ##
+    {%- if log_format.name %}
+    log_format {{ log_format.name }} {{ log_format.config }};
+    {%- else  %}
+    log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for"';
+    {% endif %}
+    {% if log_format.name %}
+    access_log {{ access_log }} {{ log_format.name|safe }};
+    {%- else  %}
+    access_log {{ access_log }} main;
+    {%- endif %}
+
+
+    ##
+    # Gzip 配置
+    ##
+
+    gzip on;
+    gzip_min_length    1k;
+    gzip_buffers       4 16k;
+    gzip_http_version  1.0;
+    gzip_proxied       any;
+    gzip_comp_level    2;
+    gzip_types         text/plain application/x-javascript text/css application/xml;
+    gzip_vary          on;
+
+    ##
+    # 附加参数
+    ##
+    {%- for key, value in extras.items() %}
+    {{ key|safe }} {{ value|safe }};
+    {%- endfor %}
+
+    ##
+    # 自定义头信息
+    ##
+    {%- if custom_headers %}
+    {{ custom_headers | safe }}
+    {%- endif %}
+
+    ##
+    # 负载均衡
+    ##
+    include ./upstreams/*.conf;
+
+    ##
+    # 虚拟主机配置
+    ##
+    include ./vhost.d/*.conf;
+
+    ##
+    # map配置
+    ##
+    include ./maps/*.conf;
+
+}

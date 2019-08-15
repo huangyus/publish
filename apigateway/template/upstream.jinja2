@@ -1,0 +1,79 @@
+{%- if desc -%}
+# {{ desc }}
+{%- endif %}
+{%- if status %}
+upstream {{ name }} {
+{%- else  %}
+# upstream {{ name }} {
+{%- endif  %}
+    {%- if ip_hash  %}
+    ip_hash;
+    {%- endif %}
+    {%- for server in upstreams %}
+    {%- if server.weight and server.max_fails and server.fail_timeout %}
+    {%- if server.status  %}
+    server {{ server.address }}:{{ server.port }} weight={{ server.weight }} max_fails={{ server.max_fails }} fail_timeout={{ server.fail_timeout }}s;
+    {%- else  %}
+    # server {{ server.address }}:{{ server.port }} weight={{ server.weight }} max_fails={{ server.max_fails }} fail_timeout={{ server.fail_timeout }}s;
+    {%- endif  %}
+    {%- elif server.weight and server.max_fails and not server.fail_timeout %}
+    {%- if server.status %}
+    server {{ server.address }}:{{ server.port }} weight={{ server.weight }} max_fails={{ server.max_fails }};
+    {%- else  %}
+    # server {{ server.address }}:{{ server.port }} weight={{ server.weight }} max_fails={{ server.max_fails }};
+    {%- endif  %}
+    {%- elif server.weight and server.fail_timeout and not server.max_fails %}
+    {%- if server.status  %}
+    server {{ server.address }}:{{ server.port }}  weight={{ server.weight }} fail_timeout={{ server.fail_timeout }}s;
+    {%- else  %}
+    # server {{ server.address }}:{{ server.port }}  weight={{ server.weight }} fail_timeout={{ server.fail_timeout }}s;
+    {%- endif  %}
+    {%- elif server.max_fails and server.fail_timeout and not server.weight%}
+    {%- if server.status  %}
+    server {{ server.address }}:{{ server.port }}  max_fails={{ server.max_fails }} fail_timeout={{ server.fail_timeout }}s;
+    {%- else  %}
+    # server {{ server.address }}:{{ server.port }}  max_fails={{ server.max_fails }} fail_timeout={{ server.fail_timeout }}s;
+    {%- endif  %}
+    {%- elif server.weight and not  server.max_fails and not server.fail_timeout %}
+    {%- if server.status  %}
+    server {{ server.address }}:{{ server.port }} weight={{ server.weight }};
+    {%- else  %}
+    # server {{ server.address }}:{{ server.port }} weight={{ server.weight }};
+    {%- endif  %}
+    {%- elif not server.weight and server.max_fails and not server.fail_timeout %}
+    {%- if server.status  %}
+    server {{ server.address }}:{{ server.port }} max_fails={{ server.max_fails }};
+    {%- else  %}
+    # server {{ server.address }}:{{ server.port }} max_fails={{ server.max_fails }};
+    {%- endif  %}
+    {%-elif  not server.weight and not server.max_fails and server.fail_timeout %}
+    {%- if server.status  %}
+    server {{ server.address }}:{{ server.port }} fail_timeout={{ server.fail_timeout }}s;
+    {%- else  %}
+    # server {{ server.address }}:{{ server.port }} fail_timeout={{ server.fail_timeout }}s;
+    {%- endif  %}
+    {%- else %}
+    {%- if server.status  %}
+    server {{ server.address }}:{{ server.port }};
+    {%- else  %}
+    # server {{ server.address }}:{{ server.port }};
+    {%- endif  %}
+    {%- endif %}
+    {%- endfor %}
+    {%- if http_check %}
+    check interval=3000 rise=2 fall=5 timeout=1000 type=http;
+    check_keepalive_requests 100;
+    check_http_send "HEAD / HTTP/1.1\r\nConnection: keep-alive\r\n\r\n";
+    check_http_expect_alive http_2xx http_3xx;
+    {%- endif %}
+    {%- if tcp_check %}
+    check interval=3000 fall=5 rise=2 timeout=3000 default_down=true type=tcp;
+    {%- endif %}
+    {%- if keepalive %}
+    keepalive {{ keepalive }};
+    {%- endif %}
+{%- if status %}
+}
+{%- else %}
+#}
+{%- endif %}

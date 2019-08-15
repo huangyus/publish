@@ -1,0 +1,46 @@
+    {%- for location in dynamics_list %}
+    {%- if location.location_desc %}
+    # {{ location.location_desc }}
+    {%- endif %}
+    {%- for key, value in extras.iteritems()  %}
+    {{ key|safe }} {{ value|safe }};
+    {%- endfor %}
+
+    location {{ location.location_url }} {
+        {%- for key, value in location.location_extra.items()  %}
+        {{ key|safe }} {{ value|safe }};
+        {%- endfor %}
+        {%- if location.location_condition %}
+        {{ location.location_condition |safe }}
+        {%- endif  %}
+        {%- for lua in location.location_lua.items()  %}
+        {{ lua.lua_key }} {{ lua.lua_path }};
+        {%- endfor  %}
+        {%- if location.location_type == 'upstream' %}
+            proxy_pass http://{{ location.location_upstream }}{{ location.location_proxy_url }};
+        {%- elif location.location_type == 'proxy_pass' %}
+        {{ location.location_type }} http://{{ location.location_upstream }}{{ location.location_proxy_url }};
+        {%- elif not location.location_type == 'upstream' and  not location.location_type == 'proxy_pass' %}
+        {{ location.location_type }} {{ location.location_upstream }}{{ location.location_proxy_url }};
+        {% endif %}
+    }
+
+    {%- endfor %}
+
+    {%- for location in statics_list %}
+    {%- if location.location_desc %}
+    # {{ location.location_desc }}
+    {%- endif %}
+    location {{ location.location_url }} {
+        {%- if location.location_condition %}
+        {{ location.location_condition|safe }}
+        {%- endif  %}
+        {%- for key, value in location.location_extra.items()  %}
+        {{ key|safe }} {{ value|safe }};
+        {%- endfor %}
+        {%- if location.location_type %}
+        {{ location.location_type }} {{ location.location_static }};
+        {%- endif %}
+    }
+
+    {%- endfor %}

@@ -1,0 +1,13 @@
+i[class^="el-icon-fa"], i[class*=" el-icon-fa"] {
+  font-family:"FontAwesome" !important;
+  display: inline-block;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+$fa-font-path: "~font-awesome/fonts";
+$fa-css-prefix: "el-icon-fa";
+
+@import "~font-awesome/scss/font-awesome.scss";

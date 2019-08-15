@@ -1,0 +1,8 @@
+{%- for c in config %}
+geo ${{ c.variable }} ${{ c.name }} {
+        default 1;
+        {%- for map in maps %}
+        {{ map.address }} 0;
+        {%- endfor %}
+}
+{% endfor %}
