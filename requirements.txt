@@ -1,6 +1,6 @@
 pika
 channels
-Django==2.1.2
+Django==2.1.11
 djangorestframework==3.9.1
 celery==4.2.1
 django-celery-results==1.0.4
