@@ -1,7 +1,7 @@
 pika
 channels
 Django==2.2.10
-djangorestframework==3.9.1
+djangorestframework==3.11.2
 celery==4.2.1
 django-celery-results==1.0.4
 # 手动安装
