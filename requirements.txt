@@ -3,7 +3,7 @@ channels
 Django==2.2.10
 djangorestframework==3.9.1
 celery==4.2.1
-django-celery-results==1.0.4
+django-celery-results==2.4.0
 # 手动安装
 # https://twistedmatrix.com/Releases/Twisted/18.9/Twisted-18.9.0.tar.bz2
 channels-redis==2.3.3
